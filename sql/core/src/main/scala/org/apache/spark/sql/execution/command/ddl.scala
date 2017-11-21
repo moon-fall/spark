@@ -308,14 +308,6 @@ case class AlterTableChangeColumnCommand(
     val resolver = sparkSession.sessionState.conf.resolver
     DDLUtils.verifyAlterTableType(catalog, table, isView = false)
 
-    table.storage
-    //    if (!columnEqual(originColumn, newColumn, resolver)) {
-    //      throw new AnalysisException(
-    //        "ALTER TABLE CHANGE COLUMN is not supported for changing column " +
-    //          s"'${originColumn.name}' with type '${originColumn.dataType}' to " +
-    //          s"'${newColumn.name}' with type '${newColumn.dataType}'")
-    //    }
-
     // Find the origin column from schema by column name.
     val originColumn = findColumnByName(table.schema, columnName, resolver)
 
