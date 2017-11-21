@@ -301,33 +301,33 @@ case class AlterTableChangeColumnCommand(
     columnName: String,
     newColumn: StructField) extends RunnableCommand {
 
-  // TODO: support change column name/dataType/metadata/position.
+  // TODO: support change column metadata/position.
   override def run(sparkSession: SparkSession): Seq[Row] = {
     val catalog = sparkSession.sessionState.catalog
     val table = catalog.getTableMetadata(tableName)
     val resolver = sparkSession.sessionState.conf.resolver
     DDLUtils.verifyAlterTableType(catalog, table, isView = false)
 
+    table.storage
+    //    if (!columnEqual(originColumn, newColumn, resolver)) {
+    //      throw new AnalysisException(
+    //        "ALTER TABLE CHANGE COLUMN is not supported for changing column " +
+    //          s"'${originColumn.name}' with type '${originColumn.dataType}' to " +
+    //          s"'${newColumn.name}' with type '${newColumn.dataType}'")
+    //    }
+
     // Find the origin column from schema by column name.
     val originColumn = findColumnByName(table.schema, columnName, resolver)
-    // Throw an AnalysisException if the column name/dataType is changed.
-    if (!columnEqual(originColumn, newColumn, resolver)) {
-      throw new AnalysisException(
-        "ALTER TABLE CHANGE COLUMN is not supported for changing column " +
-          s"'${originColumn.name}' with type '${originColumn.dataType}' to " +
-          s"'${newColumn.name}' with type '${newColumn.dataType}'")
-    }
 
     val newSchema = table.schema.fields.map { field =>
       if (field.name == originColumn.name) {
-        // Create a new column from the origin column with the new comment.
-        addComment(field, newColumn.getComment)
+        newColumn
       } else {
         field
       }
     }
-    val newTable = table.copy(schema = StructType(newSchema))
-    catalog.alterTable(newTable)
+
+    catalog.alterTableDataSchema(tableName, StructType(newSchema))
 
     Seq.empty[Row]
   }
