@@ -313,7 +313,7 @@ case class AlterTableChangeColumnCommand(
 
     val newSchema = table.schema.fields.map { field =>
       if (field.name == originColumn.name) {
-        newColumn
+        field.copy(name=newColumn.name,dataType = newColumn.dataType)
       } else {
         field
       }

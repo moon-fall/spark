@@ -2,11 +2,11 @@
 CREATE TABLE test_change(a INT, b STRING, c INT) using parquet;
 DESC test_change;
 
--- Change column name (not supported yet)
+-- Change column name
 ALTER TABLE test_change CHANGE a a1 INT;
 DESC test_change;
 
--- Change column dataType (not supported yet)
+-- Change column dataType
 ALTER TABLE test_change CHANGE a a STRING;
 DESC test_change;
 

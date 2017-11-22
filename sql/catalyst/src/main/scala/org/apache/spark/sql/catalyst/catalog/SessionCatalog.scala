@@ -340,18 +340,18 @@ class SessionCatalog(
     requireDbExists(db)
     requireTableExists(tableIdentifier)
 
-    val catalogTable = externalCatalog.getTable(db, table)
-    val oldDataSchema = catalogTable.dataSchema
-    // not supporting dropping columns yet
-    val nonExistentColumnNames =
-      oldDataSchema.map(_.name).filterNot(columnNameResolved(newDataSchema, _))
-    if (nonExistentColumnNames.nonEmpty) {
-      throw new AnalysisException(
-        s"""
-           |Some existing schema fields (${nonExistentColumnNames.mkString("[", ",", "]")}) are
-           |not present in the new schema. We don't support dropping columns yet.
-         """.stripMargin)
-    }
+//    val catalogTable = externalCatalog.getTable(db, table)
+//    val oldDataSchema = catalogTable.dataSchema
+//    // not supporting dropping columns yet
+//    val nonExistentColumnNames =
+//      oldDataSchema.map(_.name).filterNot(columnNameResolved(newDataSchema, _))
+//    if (nonExistentColumnNames.nonEmpty) {
+//      throw new AnalysisException(
+//        s"""
+//           |Some existing schema fields (${nonExistentColumnNames.mkString("[", ",", "]")}) are
+//           |not present in the new schema. We don't support dropping columns yet.
+//         """.stripMargin)
+//    }
 
     externalCatalog.alterTableDataSchema(db, table, newDataSchema)
   }

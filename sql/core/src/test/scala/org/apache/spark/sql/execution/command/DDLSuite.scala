@@ -1457,10 +1457,19 @@ abstract class DDLSuite extends QueryTest with SQLTestUtils {
       }
       column.map(_.metadata).getOrElse(Metadata.empty)
     }
-    // Ensure that change column will preserve other metadata fields.
+    // Ensure that change column will preserve other metadata fields
     sql("ALTER TABLE dbx.tab1 CHANGE COLUMN col1 col1 INT COMMENT 'this is col1'")
     assert(getMetadata("col1").getString("key") == "value")
+
+    // Ensure that changing column takes effect
+    sql("ALTER TABLE dbx.tab1 CHANGE COLUMN col1 col2 STRING")
+    val column = catalog.getTableMetadata(tableIdent).schema.fields.find(_.name == "col2")
+    assert(column.get.dataType == StringType )
   }
+
+
+
+
 
   test("drop build-in function") {
     Seq("true", "false").foreach { caseSensitive =>
