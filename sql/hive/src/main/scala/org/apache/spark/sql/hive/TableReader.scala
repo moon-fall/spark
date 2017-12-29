@@ -303,6 +303,10 @@ class HadoopTableReader(
       classOf[Writable],
       _minSplitsPerRDD)
 
+    val partitions = rdd.getPartitions
+
+    logInfo(s"rdd.partitions.length: ${rdd.partitions.length}")
+
     // Only take the value (skip the key) because Hive works only with values.
     rdd.map(_._2)
   }

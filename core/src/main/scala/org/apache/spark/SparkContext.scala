@@ -705,10 +705,10 @@ class SparkContext(config: SparkConf) extends Logging {
   /** Distribute a local Scala collection to form an RDD.
    *
    * @note Parallelize acts lazily. If `seq` is a mutable collection and is altered after the call
-   * to parallelize and before the first action on the RDD, the resultant RDD will reflect the
-   * modified collection. Pass a copy of the argument to avoid this.
-   * @note avoid using `parallelize(Seq())` to create an empty `RDD`. Consider `emptyRDD` for an
-   * RDD with no partitions, or `parallelize(Seq[T]())` for an RDD of `T` with empty partitions.
+    * to parallelize and before the first action on the RDD, the resultant RDD will reflect the
+    * modified collection. Pass a copy of the argument to avoid this.
+    * @note avoid using `parallelize(Seq())` to create an empty `RDD`. Consider `emptyRDD` for an
+    * RDD with no partitions, or `parallelize(Seq[T]())` for an RDD of `T` with empty partitions.
    * @param seq Scala collection to distribute
    * @param numSlices number of partitions to divide the collection into
    * @return RDD representing distributed collection
